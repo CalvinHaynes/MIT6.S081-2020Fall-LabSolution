@@ -156,6 +156,8 @@ UPROGS=\
 	$U/_exer5_forkexec1\
     $U/_exer6_forkexec2\
 	$U/_exer7_redirect\
+	$U/_sleep\
+	$U/_pingpong\
 
 ifeq ($(LAB),syscall)
 UPROGS += \
