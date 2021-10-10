@@ -1,10 +1,10 @@
 FROM ubuntu:20.04
 ARG arch_name=amd64
 
-# 前几步因为依赖不全的原因问题百出，所以放弃了，还是ubuntu20.04官方镜像源香啊
-# 首先备份源列表
+# 前几步因为依赖不全的原因问题百出，所以放弃了，还是ubuntu20.04官方镜像源对于MIT6.S081所需依赖最全面
+# 1.备份源列表
 # RUN cp /etc/apt/sources.list /etc/apt/sources.backup.list
-# 把本目录下的sources.list中的镜像源（阿里源，中科大源，清华源）添加到Docker中，下载速度起飞
+# 2.把本目录下的sources.list中的镜像源（阿里源，中科大源，清华源）添加到Docker中，下载速度起飞
 # COPY sources.list /etc/apt/sources.list
 
 # 更新源
@@ -15,16 +15,8 @@ RUN useradd -m mit6s081 && \
     echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
     echo "mit6s081 ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers 
 
-# 设置一些环境变量
-ENV TZ=Asia/Shanghai \
-    LANG=en_US.utf8 \
-    LANGUAGE=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8 \
-    DEBIAN_FRONTEND=noninteractive
-
 # MIT6.S081 Lab所用依赖
-
-# 1.安装RISC-V交叉编译工具
+# 1.安装RISC-V交叉编译工具和一些其他的常用工具
 RUN apt-get install -y git wget build-essential gdb-multiarch qemu-system-misc gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu libpixman-1-dev gcc-riscv64-unknown-elf libglib2.0-dev pkg-config
 
 # 2.安装QEMU和配置QEMU
@@ -44,11 +36,9 @@ RUN aria2c https://github.com.cnpmjs.org/cdr/code-server/releases/download/v3.12
 USER mit6s081
 
 # 下载一些code-server的插件
-
-# 1.Office Viewer Extension
 RUN mkdir /home/mit6s081/extensions
-ADD cweijan.vscode-office-2.0.3.vsix /home/mit6s081/extensions
-RUN code-server --install-extension /home/mit6s081/extensions/cweijan.vscode-office-2.0.3.vsix
+# 1.Markdown Extension
+RUN code-server --install-extension yzhang.markdown-all-in-one
 
 # 2.Cpp Extension
 ADD cpptools-linux.vsix /home/mit6s081/extensions
@@ -56,6 +46,7 @@ RUN code-server --install-extension /home/mit6s081/extensions/cpptools-linux.vsi
 
 # 3.Material Theme Extension
 RUN code-server --install-extension equinusocio.vsc-material-theme 
+
 
 # 切换回Root用户，拥有最高权限
 USER root
