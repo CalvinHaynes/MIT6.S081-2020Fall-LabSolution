@@ -25,7 +25,7 @@ ENV TZ=Asia/Shanghai \
 # MIT6.S081 Lab所用依赖
 # 1.安装RISC-V交叉编译工具和一些其他的常用工具
 RUN apt-get update && \
-    apt-get install -y sudo locales git wget vim build-essential gdb-multiarch qemu-system-misc gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu libpixman-1-dev gcc-riscv64-unknown-elf libglib2.0-dev pkg-config
+    apt-get install -y sudo dos2unix git wget vim build-essential gdb-multiarch qemu-system-misc gcc-riscv64-linux-gnu binutils-riscv64-linux-gnu libpixman-1-dev gcc-riscv64-unknown-elf libglib2.0-dev pkg-config
 # 2.安装QEMU和配置QEMU
 RUN wget https://download.qemu.org/qemu-5.1.0.tar.xz 
 RUN tar xf qemu-5.1.0.tar.xz 
