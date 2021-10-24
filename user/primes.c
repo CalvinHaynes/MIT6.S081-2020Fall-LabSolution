@@ -58,11 +58,10 @@ void child_process(int* pLeft){
         printf(" prime %d\n",temp);
         //将第一个输出的数存下来
         int prime = temp;   
-
+        close(pRight[READ_END]);
         //读取所有左管道（前一管道的输入）的值和prime相除，整除则将对应的左管道中的值输出到右管道（输出到下一管道），循环往复
         while (read(pLeft[READ_END],&temp,sizeof(int)) != 0)
         {
-            close(pRight[READ_END]);
             if (temp % prime != 0){
                 write(pRight[WRITE_END],&temp,sizeof(int));
             }
