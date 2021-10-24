@@ -158,6 +158,7 @@ UPROGS=\
 	$U/_exer7_redirect\
 	$U/_sleep\
 	$U/_pingpong\
+	$U/_primes\
 
 ifeq ($(LAB),syscall)
 UPROGS += \
