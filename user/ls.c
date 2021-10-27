@@ -3,6 +3,7 @@
 #include "user/user.h"
 #include "kernel/fs.h"
 
+//此函数的目的就是为了找到path路径下的最后一个/后面的字符串
 char*
 fmtname(char *path)
 {
@@ -17,8 +18,8 @@ fmtname(char *path)
   // Return blank-padded name.
   if(strlen(p) >= DIRSIZ)
     return p;
-  memmove(buf, p, strlen(p));
-  memset(buf+strlen(p), ' ', DIRSIZ-strlen(p));
+  memmove(buf, p, strlen(p));               //把p指向内存块中的内容复制到buf中
+  memset(buf+strlen(p), ' ', DIRSIZ-strlen(p)); //将buf+strlen(p)指针指向的内存块的前DIRSIZ-strlen(p)个字节设置为空-->其实就是把buf剩下的位置置空
   return buf;
 }
 
