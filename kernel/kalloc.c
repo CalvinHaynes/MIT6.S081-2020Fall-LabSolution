@@ -14,6 +14,7 @@ void freerange(void *pa_start, void *pa_end);
 extern char end[]; // first address after kernel.
                    // defined by kernel.ld.
 
+//空闲页列表数据结构
 struct run {
   struct run *next;
 };
@@ -23,6 +24,7 @@ struct {
   struct run *freelist;
 } kmem;
 
+//初始化内核的页结构
 void
 kinit()
 {
@@ -62,6 +64,7 @@ kfree(void *pa)
   release(&kmem.lock);
 }
 
+// 从页空闲列表中分配一页（4096bytes）的物理内存，并返回指针
 // Allocate one 4096-byte page of physical memory.
 // Returns a pointer that the kernel can use.
 // Returns 0 if the memory cannot be allocated.
