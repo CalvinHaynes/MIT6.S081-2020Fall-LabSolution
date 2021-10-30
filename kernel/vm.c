@@ -21,9 +21,10 @@ extern char trampoline[]; // trampoline.S
 void
 kvminit()
 {
-  kernel_pagetable = (pagetable_t) kalloc();
-  memset(kernel_pagetable, 0, PGSIZE);
+  kernel_pagetable = (pagetable_t) kalloc();  //为第一级页表分配内存
+  memset(kernel_pagetable, 0, PGSIZE);        //初始化第一级页表为0
 
+  //利用kvmmap函数将每一个IO设备映射到内核虚拟地址空间(虚拟地址和物理地址完全相同的一一对应)，对应着xv6内核虚拟地址和物理地址映射的图
   // uart registers
   kvmmap(UART0, UART0, PGSIZE, PTE_R | PTE_W);
 
@@ -111,6 +112,7 @@ walkaddr(pagetable_t pagetable, uint64 va)
   return pa;
 }
 
+//va : virtual address; pa : physical address
 // add a mapping to the kernel page table.
 // only used when booting.
 // does not flush TLB or enable paging.
