@@ -233,7 +233,7 @@ userinit(void)
   release(&p->lock);
 }
 
-// Sbrk系统调用在XV6中的实际实现API
+// Sbrk System Call在XV6中的实际实现API
 // Grow or shrink user memory by n bytes.
 // Return 0 on success, -1 on failure.
 int
