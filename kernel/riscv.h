@@ -323,10 +323,10 @@ sfence_vma()
 #define PGSIZE 4096 // bytes per page，每页4096bytes
 #define PGSHIFT 12  // bits of offset within a page，12位偏移地址就对应着4096bytes
 
-#define PGROUNDUP(sz)  (((sz)+PGSIZE-1) & ~(PGSIZE-1))  //说是对齐每页4096内存的，但是不懂
-#define PGROUNDDOWN(a) (((a)) & ~(PGSIZE-1))
+#define PGROUNDUP(sz)  (((sz)+PGSIZE-1) & ~(PGSIZE-1))  //对齐每页的4096bytes，，把大于4096的sz/小于4096的sz强制置为4096/4096的倍数
+#define PGROUNDDOWN(a) (((a)) & ~(PGSIZE-1))            //把虚拟地址的后12位干掉（清零），就是把虚拟地址中的offset干掉，只留下用于寻址PTE的前**位
 
-#define PTE_V (1L << 0) // valid
+#define PTE_V (1L << 0) // valid标志位
 #define PTE_R (1L << 1)
 #define PTE_W (1L << 2)
 #define PTE_X (1L << 3)
@@ -335,7 +335,7 @@ sfence_vma()
 // shift a physical address to the right place for a PTE.
 #define PA2PTE(pa) ((((uint64)pa) >> 12) << 10)
 
-#define PTE2PA(pte) (((pte) >> 10) << 12)
+#define PTE2PA(pte) (((pte) >> 10) << 12)   //页表中PTE转Physical Address
 
 #define PTE_FLAGS(pte) ((pte) & 0x3FF)
 

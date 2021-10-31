@@ -53,10 +53,11 @@ kvminit()
 void
 kvminithart()
 {
-  w_satp(MAKE_SATP(kernel_pagetable));
-  sfence_vma();
+  w_satp(MAKE_SATP(kernel_pagetable));  //将kernel pagetable地址加载到SATP寄存器，从此之后虚拟内存地址正式被使用了
+  sfence_vma();                         //清空TLB
 }
 
+// 软件MMU模拟函数，返回va对应的最低级页表（第一级页表）的PTE的物理实际地址，方便内核对最终va映射的pa进行操作
 // Return the address of the PTE in page table pagetable
 // that corresponds to virtual address va.  If alloc!=0,
 // create any required page-table pages.
@@ -143,6 +144,7 @@ kvmpa(uint64 va)
   return pa+off;
 }
 
+// 创建虚拟地址和物理地址模块映射的PTEs
 // Create PTEs for virtual addresses starting at va that refer to
 // physical addresses starting at pa. va and size might not
 // be page-aligned. Returns 0 on success, -1 if walk() couldn't
@@ -441,4 +443,30 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
   } else {
     return -1;
   }
+}
+void in_vmprint(pagetable_t pgtbl,int level){
+  // there are 2^9 = 512 PTEs in a page table.
+  for(int i = 0; i < 512; i++){
+    pte_t pte = pgtbl[i];
+    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){  //非最后一级页表的RWX标志位一般设置为0
+      // this PTE points to a lower-level page table.
+      uint64 child = PTE2PA(pte);   //拿到PTE中存储的物理地址，也即是下一级页表的物理地址（不含偏移地址，偏移地址在虚拟地址的9bit里面呢）
+      for(int j = 0; j <= level; j++){
+        printf("..");
+        if(j + 1 <= level)
+          printf(" ");
+      }
+      pagetable_t childPgtbl = (pagetable_t)child;
+      printf("%d: pte %p pa %p\n",i,pte,childPgtbl);
+      in_vmprint(childPgtbl,level + 1);
+    } else if(pte & PTE_V){                   //最后一级页表的RWX标志位由操作系统指定，一般不会都为0
+      uint64 finalPtbl = PTE2PA(pte);         //拿到最后一级页表（xv6是三级页表）的物理地址
+      printf(".. .. ..%d: pte %p pa %p\n",i,pte,(pagetable_t)finalPtbl);
+    } 
+  }
+}
+
+void vmprint(pagetable_t pgtbl){
+  printf("page table %p\n",pgtbl);
+  in_vmprint(pgtbl,0);
 }
