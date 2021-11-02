@@ -95,3 +95,9 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64
+sys_trace(void)
+{
+  //读取user-space中trace调用中的mask参数，并将其存入当前进程的proc结构体中
+}

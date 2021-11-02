@@ -104,8 +104,9 @@ extern uint64 sys_unlink(void);
 extern uint64 sys_wait(void);
 extern uint64 sys_write(void);
 extern uint64 sys_uptime(void);
+extern uint64 sys_trace(void);
 
-static uint64 (*syscalls[])(void) = {
+static uint64 (*syscalls[])(void) = {   //系统调用号和实际系统调用函数的映射数组
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
 [SYS_wait]    sys_wait,
@@ -127,6 +128,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
+[SYS_trace]   sys_trace,
 };
 
 void
@@ -135,9 +137,9 @@ syscall(void)
   int num;
   struct proc *p = myproc();
 
-  num = p->trapframe->a7;
+  num = p->trapframe->a7;   //从当前进程的tapframe中的a7中拿到syscall number
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
-    p->trapframe->a0 = syscalls[num]();
+    p->trapframe->a0 = syscalls[num](); //实际执行的syscall的函数的返回值存到当前进程的trapframe的a0中
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);
