@@ -100,4 +100,10 @@ uint64
 sys_trace(void)
 {
   //读取user-space中trace调用中的mask参数，并将其存入当前进程的proc结构体中
+  int n;
+  if(argint(0, &n) < 0)
+    return -1;
+  myproc()->syscallMask = n;
+  
+  return 0;
 }

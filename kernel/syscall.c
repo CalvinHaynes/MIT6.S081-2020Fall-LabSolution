@@ -136,10 +136,15 @@ syscall(void)
 {
   int num;
   struct proc *p = myproc();
+  char *syscallName[] = {"fork","exit","wait","pipe","read","kill","exec","fstat","chdir","dup","getpid","sbrk","sleep","uptime","open","write","mknod","unlink","link","mkdir","close","trace"};
 
+  //目前的问题是什么？问题是需要检测到trace系统调用之后，然后再打印
   num = p->trapframe->a7;   //从当前进程的tapframe中的a7中拿到syscall number
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     p->trapframe->a0 = syscalls[num](); //实际执行的syscall的函数的返回值存到当前进程的trapframe的a0中
+    // if(p->syscallNum >> num == 1)  //思路不对，没考虑到如果读到的syscallNum是代表多个系统调用的情况
+    if((1 << num) & p->syscallMask)    //按位运算真是底层操作yyds，单片机中也使用很多位操作来改变寄存器某些位
+      printf("%d: syscall %s -> %d\n",p->pid,syscallName[num-1],p->trapframe->a0);  //syscallName下标从0开始，syscall number从1开始
   } else {
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);
