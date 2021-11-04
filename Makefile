@@ -176,9 +176,6 @@ UPROGS=\
 	$U/_wc\
 	$U/_zombie\
 
-
-
-
 ifeq ($(LAB),$(filter $(LAB), pgtbl lock))
 UPROGS += \
 	$U/_stats
