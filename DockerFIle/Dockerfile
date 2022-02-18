@@ -1,14 +1,6 @@
 FROM ubuntu:20.04
 ARG arch_name=amd64
 
-# 前几步因为针对本实验依赖不全的原因问题百出，所以放弃了，还是ubuntu20.04官方镜像源对于MIT6.S081所需依赖最全面
-# 1.备份源列表
-# RUN cp /etc/apt/sources.list /etc/apt/sources.backup.list
-# 2.把本目录下的sources.list中的镜像源添加到Docker中，下载速度起飞
-# COPY sources.list /etc/apt/sources.list
-# 3.更新源
-# RUN apt-get update 
-
 # 创建一个mit6s081的用户和其home目录
 RUN useradd -m mit6s081 && \
     echo "root ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers && \
