@@ -22,7 +22,7 @@
 
 ![image](https://cdn.jsdelivr.net/gh/CalvinHaynes/ImageHub@main/BlogImage/image.5l840ak5vw00.png)
 
-关于我是如何搭建的以及windows/linux操作系统下如何使用我的镜像,我写了一篇知乎文章,大家可以来看看:[一个玩转国外CSLab的通用环境搭建方案（附我的搭建好的MIT6.S081环境）](https://zhuanlan.zhihu.com/p/417668697)
+关于我是如何搭建的以及windows/linux操作系统下如何使用我的镜像,我写了一篇知乎文章,大家可以来看看:[一个玩转国外CSLab的通用环境搭建方案（附我的搭建好的MIT6.S081环境）](https://zhuanlan.zhihu.com/p/449687883)
 
 `Dockerfile`也在`main`分支中,感兴趣的小伙伴可以自行查看
 
