@@ -20,7 +20,7 @@
 
 为了有最纯净做实验的感觉,我制作了一个`Docker`的镜像,直接`pull`下来简单配置一下,就可以实现在网页版的`Vscode`上做这个实验(该镜像我依旧还会优化其使用体验,敬请期待),具体效果如下:
 
-![image](https://cdn.jsdelivr.net/gh/CalvinHaynes/ImageHub@main/BlogImage/image.5l840ak5vw00.png)
+![image](https://xf233.oss-cn-hangzhou.aliyuncs.com/CalvinHaynesBlogImage/image.5l840ak5vw00.png)
 
 关于我是如何搭建的以及windows/linux操作系统下如何使用我的镜像,我写了一篇知乎文章,大家可以来看看:[一个玩转国外CSLab的通用环境搭建方案（附我的搭建好的MIT6.S081环境）](https://zhuanlan.zhihu.com/p/449687883)
 
