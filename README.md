@@ -10,10 +10,9 @@
 
 (在每个实验的分支下我也会把一些教授课堂上演示的`exercise`也写到里面)
 
-- `main`分支：存放我的`Dockerfile`、课程笔记、其他操作系统的学习辅助资料等
-
+- `main`分支: 全部资料都会merge到这里
+- `notes`分支：存放我的`Dockerfile`、课程笔记、其他操作系统的学习辅助资料等
 - `util_solution`：存放第一个实验`Lab: Xv6 and Unix utilities`我的解决方案，解题思路，参考资料等
-
 - [ ] `pgtbl_solution`：存放第三个实验`Lab: page tables`我的解决方案，解题思路，参考资料等
 
 ## 2 - Docker环境搭建方案
