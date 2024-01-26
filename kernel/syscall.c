@@ -106,7 +106,8 @@ extern uint64 sys_write(void);
 extern uint64 sys_uptime(void);
 extern uint64 sys_trace(void);
 
-static uint64 (*syscalls[])(void) = {   //系统调用号和实际系统调用函数的映射数组
+//系统调用号和实际系统调用函数的映射数组
+static uint64 (*syscalls[])(void) = {   
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
 [SYS_wait]    sys_wait,
@@ -139,13 +140,17 @@ syscall(void)
   char *syscallName[] = {"fork","exit","wait","pipe","read","kill","exec","fstat","chdir","dup","getpid","sbrk","sleep","uptime","open","write","mknod","unlink","link","mkdir","close","trace"};
 
   //目前的问题是什么？问题是需要检测到trace系统调用之后，然后再打印
-  num = p->trapframe->a7;   //从当前进程的tapframe中的a7中拿到syscall number
+  num = p->trapframe->a7;   //从当前进程的trapframe中的a7中拿到syscall number
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
+    // Use num to lookup the system call function for num, call it,
+    // and store its return value in p->trapframe->a0
     p->trapframe->a0 = syscalls[num](); //实际执行的syscall的函数的返回值存到当前进程的trapframe的a0中
-    // if(p->syscallNum >> num == 1)  //思路不对，没考虑到如果读到的syscallNum是代表多个系统调用的情况
-    if((1 << num) & p->syscallMask)    //按位运算真是底层操作yyds，单片机中也使用很多位操作来改变寄存器某些位
-      printf("%d: syscall %s -> %d\n",p->pid,syscallName[num-1],p->trapframe->a0);  //syscallName下标从0开始，syscall number从1开始
+    // if(p->syscallNum >> num == 1)    //思路不对，没考虑到如果读到的syscallNum是代表多个系统调用的情况
+    if((1 << num) & p->syscallMask)     //
+      //syscallName下标从0开始，syscall number从1开始(进程号 -> syscall名称 -> syscall返回值)
+      printf("%d: syscall %s -> %d\n",p->pid,syscallName[num-1],p->trapframe->a0);  
   } else {
+    //If the systemcall number is invalid, syscall prints an error and returns -1.
     printf("%d %s: unknown sys call %d\n",
             p->pid, p->name, num);
     p->trapframe->a0 = -1;
