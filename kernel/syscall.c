@@ -147,7 +147,7 @@ syscall(void)
     // Use num to lookup the system call function for num, call it,
     // and store its return value in p->trapframe->a0
     p->trapframe->a0 = syscalls[num](); //实际执行的syscall的函数的返回值存到当前进程的trapframe的a0中
-    if((1 << num) & p->syscallMask)     //
+    if((1 << num) & p->syscallMask)     //类似嵌入式系统利用寄存器的每一位表示配置
       //syscallName下标从0开始，syscall number从1开始(进程号 -> syscall名称 -> syscall返回值)
       printf("%d: syscall %s -> %d\n",p->pid,syscallName[num-1],p->trapframe->a0);  
   } else {

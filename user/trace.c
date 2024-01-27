@@ -14,7 +14,8 @@ main(int argc, char *argv[])
     exit(1);
   }
 
-  if (trace(atoi(argv[1])) < 0) {               //trace的参数是一个mask，mask规则是1 << 系统调用号
+  //trace的参数是一个mask，mask规则是1 << 系统调用号
+  if (trace(atoi(argv[1])) < 0) {               
     fprintf(2, "%s: trace failed\n", argv[0]);
     exit(1);
   }
