@@ -80,3 +80,19 @@ kalloc(void)
     memset((char*)r, 5, PGSIZE); // fill with junk
   return (void*)r;
 }
+
+//collect the amount of free memory(bytes)
+uint64
+kfreemem_getamount(void)
+{
+  struct run *r;
+  uint64 free_pages = 0;
+
+  acquire(&kmem.lock); // 获取锁，以安全地访问共享资源
+  //遍历空闲内存链表(当 r 成为 NULL 时，意味着已经到达链表的末尾，循环结束), 统计空闲页的个数
+  for(r = kmem.freelist; r; r = r->next)  
+    free_pages += 1;
+  release(&kmem.lock); // 释放锁
+
+  return free_pages * PGSIZE; // 返回空闲内存的总量
+}

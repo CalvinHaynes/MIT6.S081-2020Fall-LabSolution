@@ -697,3 +697,17 @@ procdump(void)
     printf("\n");
   }
 }
+
+//collect the number of processes(系统中活跃的进程个数-->状态不是UNUSED的进程)
+uint64
+proc_gettotalnum(void) 
+{
+  uint64 total = 0;
+  int nproc = sizeof(proc) / sizeof(proc[0]);  // 计算proc数组中的元素个数
+  for(int i = 0; i < nproc; i++) {
+    if (proc[i].state != UNUSED) {
+      total++;
+    }
+  }
+  return total;
+}
