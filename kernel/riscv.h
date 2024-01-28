@@ -326,16 +326,18 @@ sfence_vma()
 #define PGROUNDUP(sz)  (((sz)+PGSIZE-1) & ~(PGSIZE-1))  //对齐每页的4096bytes，，把大于4096的sz/小于4096的sz强制置为4096/4096的倍数
 #define PGROUNDDOWN(a) (((a)) & ~(PGSIZE-1))            //把虚拟地址的后12位干掉（清零），就是把虚拟地址中的offset干掉，只留下用于寻址PTE的前**位
 
-#define PTE_V (1L << 0) // valid标志位
-#define PTE_R (1L << 1)
-#define PTE_W (1L << 2)
-#define PTE_X (1L << 3)
-#define PTE_U (1L << 4) // 1 -> user can access
+// 以下是PTE(page table entries)中的各种flag
+#define PTE_V (1L << 0) //有效 Valid
+#define PTE_R (1L << 1) //可读 Read
+#define PTE_W (1L << 2) //可写 Wirte
+#define PTE_X (1L << 3) //可运行 eXecute
+#define PTE_U (1L << 4) //用户模式可访问 User mode accessible
 
 // shift a physical address to the right place for a PTE.
 #define PA2PTE(pa) ((((uint64)pa) >> 12) << 10)
 
-#define PTE2PA(pte) (((pte) >> 10) << 12)   //页表中PTE转Physical Address
+// 将页表中PTE转Physical Address
+#define PTE2PA(pte) (((pte) >> 10) << 12)   
 
 #define PTE_FLAGS(pte) ((pte) & 0x3FF)
 
@@ -351,4 +353,5 @@ sfence_vma()
 #define MAXVA (1L << (9 + 9 + 9 + 12 - 1))
 
 typedef uint64 pte_t;
-typedef uint64 *pagetable_t; // 512 PTEs
+// pagetable_t 可以被视为指向页表的首个页表项PTE的指针(64位地址, 一个页表 = 512 PTEs)
+typedef uint64 *pagetable_t; 

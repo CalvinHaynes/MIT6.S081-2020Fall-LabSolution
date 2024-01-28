@@ -64,6 +64,7 @@ mycpu(void) {
 }
 
 // Return the current struct proc *, or zero if none.
+// 返回当前进程的结构体指针(struct proc*)
 struct proc*
 myproc(void) {
   push_off();

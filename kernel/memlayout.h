@@ -44,8 +44,8 @@
 // the kernel expects there to be RAM
 // for use by the kernel and user pages
 // from physical address 0x80000000 to PHYSTOP.
-#define KERNBASE 0x80000000L
-#define PHYSTOP (KERNBASE + 128*1024*1024)  //用户的RAM是128MB
+#define KERNBASE 0x80000000L                //kernal内核程序存储的起始地址(物理地址PA和逻辑地址VA都是这个,VA直接映射到PA)
+#define PHYSTOP (KERNBASE + 128*1024*1024)  //用户的RAM(物理存储DRAM)是128MB
 
 // map the trampoline page to the highest address,
 // in both user and kernel space.

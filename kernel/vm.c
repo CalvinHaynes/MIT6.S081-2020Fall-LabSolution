@@ -444,29 +444,57 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
     return -1;
   }
 }
+
+/*
+实现进程的pagetable的打印(一直打印到最后一级页表)
+格式如下:
+..<根页表PTE号>: pte <pte地址> pa <页表本行pte映射到的物理地址>
+.. ..<二级页表PTE号>: pte <pte地址> pa <页表本行pte映射到的物理地址>
+.. .. ..<三级页表PTE号>: pte <pte地址> pa <页表本行pte映射到的物理地址>
+..<根页表PTE号>: pte <pte地址> pa <页表本行pte映射到的物理地址>
+.. ..<二级页表PTE号>: pte <pte地址> pa <页表本行pte映射到的物理地址>
+.. .. ..<三级页表PTE号>: pte <pte地址> pa <页表本行pte映射到的物理地址>
+等等等等
+
+@param pgtbl 待打印的pagetable的地址 .
+@param level 待打印的pagetable的层级(0代表根页表, 1代表二级页表, 2代表三级页表)
+*/
 void in_vmprint(pagetable_t pgtbl,int level){
-  // there are 2^9 = 512 PTEs in a page table.
+  // there are 2^9 = 512 PTEs in a page table.(三级页表设计)
   for(int i = 0; i < 512; i++){
     pte_t pte = pgtbl[i];
-    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){  //非最后一级页表的RWX标志位一般设置为0
-      // this PTE points to a lower-level page table.
-      uint64 child = PTE2PA(pte);   //拿到PTE中存储的物理地址，也即是下一级页表的物理地址（不含偏移地址，偏移地址在虚拟地址的9bit里面呢）
+    
+    // 对非最后一级页表的有效页进行后续操作(非最后一级页表的RWX标志位一般设置为0)
+    if((pte & PTE_V) && (pte & (PTE_R|PTE_W|PTE_X)) == 0){  
+
+      // 取得PTE中存储的物理地址(本质是下一级页表的物理号PPN,这个PPN拼上VA中的offset才能得到物理地址PA)
+      uint64 child = PTE2PA(pte);
+
+      // 打印能直观显示出pagetable层级的前缀("..")
       for(int j = 0; j <= level; j++){
         printf("..");
         if(j + 1 <= level)
           printf(" ");
       }
+
+      // 二级页表
       pagetable_t childPgtbl = (pagetable_t)child;
-      printf("%d: pte %p pa %p\n",i,pte,childPgtbl);
-      in_vmprint(childPgtbl,level + 1);
-    } else if(pte & PTE_V){                   //最后一级页表的RWX标志位由操作系统指定，一般不会都为0
-      uint64 finalPtbl = PTE2PA(pte);         //拿到最后一级页表（xv6是三级页表）的物理地址
-      printf(".. .. ..%d: pte %p pa %p\n",i,pte,(pagetable_t)finalPtbl);
+      printf("%d: pte %p pa %p\n",i, pte, childPgtbl);
+
+      // 递归继续向下一级打印
+      in_vmprint(childPgtbl, level + 1);
+
+    // 最后一级页表的RWX标志位由操作系统指定，一般不会都为0
+    } else if(pte & PTE_V){                   
+      // 拿到最后一级页表（三级页表）的物理地址
+      uint64 finalPtbl = PTE2PA(pte);         
+      printf(".. .. ..%d: pte %p pa %p\n",i, pte, (pagetable_t)finalPtbl);
     } 
   }
 }
 
 void vmprint(pagetable_t pgtbl){
-  printf("page table %p\n",pgtbl);
+  //打印进程的根页表(root pagetable)地址(satp register中存的)
+  printf("page table %p\n",pgtbl);  //%p -> pointer 地址
   in_vmprint(pgtbl,0);
 }
