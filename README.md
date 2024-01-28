@@ -1,6 +1,6 @@
 # MIT6.S081 Lab记录
 
-这是我第一个有star的project, 有点舍不得删, 所以还是留着做纪念了, 新的Lab Solution仓库可以看我主页, 也可以直接点击[这里](https://github.com/CalvinHaynes/MIT6.S081LabSolution)跳转
+这是我学生时期第一个有star的project, 有点舍不得删, 所以还是留着做纪念了, 新的Lab Solution仓库可以看我主页, 也可以直接点击[这里](https://github.com/CalvinHaynes/MIT6.S081LabSolution)跳转
 
 ## 前言
 
