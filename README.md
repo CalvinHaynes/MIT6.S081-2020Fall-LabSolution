@@ -1,5 +1,7 @@
 # MIT6.S081 Lab记录
 
+这是我第一个有star的project, 有点舍不得删, 所以还是留着做纪念了, 新的Lab Solution仓库可以看我主页, 也可以直接点击[这里](https://github.com/CalvinHaynes/MIT6.S081LabSolution)跳转
+
 ## 前言
 
 本仓库旨在于整理`MIT6.S081 2020`秋季网课的实验源代码, `Docker`环境搭建方案, 授课视频或`xv6book`中出现的`exercise`,以及我的实验解决笔记和代码.
